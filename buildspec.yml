@@ -7,9 +7,9 @@ pre_build:
   commands:
     - pip3 install awscli --upgrade --user
     - export DATE=`date +%Y%m%d%H%M`
-    - export DBIDENTIFIER=db-cluster-identifier-prefix-$DATE
+    - export DBIDENTIFIER=TestDBIdentifier-$DATE
     - echo $DBIDENTIFIER
-    - aws rds restore-db-cluster-from-snapshot --snapshot-identifier arn:aws:rds:region-ID:account-ID:cluster-snapshot:db-snapshot-identifier –vpc-security-group-ids vpc-security-group-id --db-cluster-identifier $DBIDENTIFIER --engine aurora
+    - aws rds restore-db-cluster-from-snapshot --snapshot-identifier arn:aws:rds:ap-south-1:753548365490:snapshot:vistasnapshot1 –vpc-security-group-ids sg-0bef4f359714bd095 --db-cluster-identifier $DBIDENTIFIER --engine mysql
     - while [ $(aws rds describe-db-cluster-endpoints --db-cluster-identifier $DBNAME | grep -c available) -eq 0 ]; do echo "sleep 60s"; sleep 60; done
     - echo "Temp db ready"
     - export ENDPOINT=$(aws rds describe-db-cluster-endpoints --db-cluster-identifier $DBIDENTIFIER| grep "\"Endpoint\"" | grep -v "\-ro\-" | awk -F '\"' '{print $4}')
